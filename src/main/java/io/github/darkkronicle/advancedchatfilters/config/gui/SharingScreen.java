@@ -103,8 +103,7 @@ public class SharingScreen extends GuiBase {
                     // If you don't use deprecated it won't work
                     Filter filter =
                             filterSave.load(
-                                    new JsonParser()
-                                            .parse(parent.text.getText())
+                                    JsonParser.parseString(parent.text.getText())
                                             .getAsJsonObject());
                     if (filter == null) {
                         throw new NullPointerException("Filter is null!");
