@@ -7,7 +7,6 @@
  */
 package io.github.darkkronicle.advancedchatfilters.config.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
@@ -32,11 +31,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 /*
    This class is based heavily off of https://github.com/maruohon/minihud/blob/d565d39c68bdcd3ed1e1cf2007491e03d9659f34/src/main/java/fi/dy/masa/minihud/gui/widgets/WidgetShapeEntry.java#L19 which is off the GNU LGPL
-
 */
 @Environment(EnvType.CLIENT)
 public class WidgetFilterEntry extends WidgetListEntryBase<Filter> {
@@ -131,60 +128,68 @@ public class WidgetFilterEntry extends WidgetListEntryBase<Filter> {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected, DrawContext context) {
-        RenderUtils.color(1f, 1f, 1f, 1f);
+    public void render(DrawContext context, int mouseX, int mouseY, boolean selected) {
+        // RenderUtils.color(1f, 1f, 1f, 1f); // TODO: Determine if required
 
         // Draw a lighter background for the hovered and the selected entry
         if (selected || this.isMouseOver(mouseX, mouseY)) {
             RenderUtils.drawRect(
-                    this.x,
-                    this.y,
-                    this.width,
-                    this.height,
-                    Colors.getInstance().getColorOrWhite("listhover").color());
+                context, // TODO: determine if correct
+                this.x,
+                this.y,
+                this.width,
+                this.height,
+                Colors.getInstance().getColorOrWhite("listhover").color()
+            );
         } else if (this.isOdd) {
             RenderUtils.drawRect(
-                    this.x,
-                    this.y,
-                    this.width,
-                    this.height,
-                    Colors.getInstance().getColorOrWhite("list1").color());
+                context, // TODO: determine if correct
+                this.x,
+                this.y,
+                this.width,
+                this.height,
+                Colors.getInstance().getColorOrWhite("list1").color()
+            );
         } else {
             RenderUtils.drawRect(
-                    this.x,
-                    this.y,
-                    this.width,
-                    this.height,
-                    Colors.getInstance().getColorOrWhite("list2").color());
+                context, // TODO: determine if correct
+                this.x,
+                this.y,
+                this.width,
+                this.height,
+                Colors.getInstance().getColorOrWhite("list2").color()
+            );
         }
         String name = this.filter.getName().config.getStringValue();
         this.drawString(
-                this.x + 4,
-                this.y + 7,
-                Colors.getInstance().getColorOrWhite("white").color(),
-                name,
-                context);
+            context,
+            this.x + 4,
+            this.y + 7,
+            Colors.getInstance().getColorOrWhite("white").color(),
+            name
+        );
 
-        RenderUtils.color(1f, 1f, 1f, 1f);
-        RenderSystem.disableBlend();
+        // RenderUtils.color(1f, 1f, 1f, 1f); // TODO: Determine if required
+        // RenderSystem.disableBlend(); // TODO: Determine if required
 
         this.drawTextFields(mouseX, mouseY, context);
 
-        super.render(mouseX, mouseY, selected, context);
+        super.render(context, mouseX, mouseY, selected);
 
-        RenderUtils.disableDiffuseLighting();
+        // RenderUtils.disableDiffuseLighting(); // TODO: Determine if required
     }
 
     @Override
-    public void postRenderHovered(
-            int mouseX, int mouseY, boolean selected, DrawContext context) {
-        super.postRenderHovered(mouseX, mouseY, selected, context);
+    public void postRenderHovered(DrawContext context, int mouseX, int mouseY, boolean selected) {
+        super.postRenderHovered(context, mouseX, mouseY, selected);
 
-        if (mouseX >= this.x
-                && mouseX < this.buttonStartX
-                && mouseY >= this.y
-                && mouseY <= this.y + this.height) {
-            RenderUtils.drawHoverText(mouseX, mouseY, this.hoverLines, context);
+        if (
+            mouseX >= this.x &&
+            mouseX < this.buttonStartX &&
+            mouseY >= this.y &&
+            mouseY <= this.y + this.height
+        ) {
+            RenderUtils.drawHoverText(context, mouseX, mouseY, this.hoverLines);
         }
     }
 

@@ -7,7 +7,6 @@
  */
 package io.github.darkkronicle.advancedchatfilters.config.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.ButtonOnOff;
@@ -32,7 +31,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 @Environment(EnvType.CLIENT)
 public class WidgetAdvancedFilterEntry extends WidgetListEntryBase<ScriptFilter> {
@@ -122,48 +120,55 @@ public class WidgetAdvancedFilterEntry extends WidgetListEntryBase<ScriptFilter>
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected, DrawContext context) {
-        RenderUtils.color(1f, 1f, 1f, 1f);
+    public void render(DrawContext context, int mouseX, int mouseY, boolean selected) {
+        // RenderUtils.color(1f, 1f, 1f, 1f); // TODO: Determine if required
 
         // Draw a lighter background for the hovered and the selected entry
         if (selected || this.isMouseOver(mouseX, mouseY)) {
             RenderUtils.drawRect(
-                    this.x,
-                    this.y,
-                    this.width,
-                    this.height,
-                    Colors.getInstance().getColorOrWhite("listhover").color());
+                context, // TODO: Ensure this is correct
+                this.x,
+                this.y,
+                this.width,
+                this.height,
+                Colors.getInstance().getColorOrWhite("listhover").color()
+            );
         } else if (this.isOdd) {
             RenderUtils.drawRect(
-                    this.x,
-                    this.y,
-                    this.width,
-                    this.height,
-                    Colors.getInstance().getColorOrWhite("list1").color());
+                context, // TODO: Ensure this is correct
+                this.x,
+                this.y,
+                this.width,
+                this.height,
+                Colors.getInstance().getColorOrWhite("list1").color()
+            );
         } else {
             RenderUtils.drawRect(
-                    this.x,
-                    this.y,
-                    this.width,
-                    this.height,
-                    Colors.getInstance().getColorOrWhite("list2").color());
+                context, // TODO: Ensure this is correct
+                this.x,
+                this.y,
+                this.width,
+                this.height,
+                Colors.getInstance().getColorOrWhite("list2").color()
+            );
         }
         String name = this.filter.getDisplayName();
         this.drawString(
-                this.x + 4,
-                this.y + 7,
-                Colors.getInstance().getColorOrWhite("white").color(),
-                name,
-                context);
+            context,
+            this.x + 4,
+            this.y + 7,
+            Colors.getInstance().getColorOrWhite("white").color(),
+            name
+        );
 
-        RenderUtils.color(1f, 1f, 1f, 1f);
-        RenderSystem.disableBlend();
+        // RenderUtils.color(1f, 1f, 1f, 1f); // TODO: Determine if required
+        // RenderSystem.disableBlend(); // TODO: Determine if required
 
-        this.drawTextFields(mouseX, mouseY, context);
+        this.drawTextFields(context, mouseX, mouseY);
 
-        super.render(mouseX, mouseY, selected, context);
+        super.render(context, mouseX, mouseY, selected);
 
-        RenderUtils.disableDiffuseLighting();
+        // RenderUtils.disableDiffuseLighting(); // TODO: Determine if required
     }
 
     private static class ButtonListener implements IButtonActionListener {
@@ -258,35 +263,36 @@ public class WidgetAdvancedFilterEntry extends WidgetListEntryBase<ScriptFilter>
         return ret;
     }
 
-    protected void drawTextFields(int mouseX, int mouseY, DrawContext context) {
+    protected void drawTextFields(DrawContext context, int mouseX, int mouseY) {
         if (this.num != null) {
             this.num.getTextField().render(context, mouseX, mouseY, 0f);
         }
     }
 
     @Override
-    public void postRenderHovered(
-            int mouseX, int mouseY, boolean selected, DrawContext context) {
-        super.postRenderHovered(mouseX, mouseY, selected, context);
+    public void postRenderHovered(DrawContext context, int mouseX, int mouseY, boolean selected) {
+        super.postRenderHovered(context, mouseX, mouseY, selected);
 
         List<String> hoverLines;
 
         if (filter.isImported()) {
             hoverLines = this.filter.getHoverLines();
         } else {
-            hoverLines =
-                    Arrays.asList(
-                            StringUtils.translate(
-                                            "advancedchatfilters.config.filtermenu.info.import")
-                                    .split("\n"));
+            hoverLines = Arrays.asList(
+                StringUtils.translate(
+                    "advancedchatfilters.config.filtermenu.info.import"
+                ).split("\n")
+            );
         }
 
         if (hoverLines != null && hoverLines.size() > 0) {
-            if (mouseX >= this.x
-                    && mouseX < this.buttonStartX
-                    && mouseY >= this.y
-                    && mouseY <= this.y + this.height) {
-                RenderUtils.drawHoverText(mouseX, mouseY, hoverLines, context);
+            if (
+                mouseX >= this.x &&
+                mouseX < this.buttonStartX &&
+                mouseY >= this.y &&
+                mouseY <= this.y + this.height
+            ) {
+                RenderUtils.drawHoverText(context, mouseX, mouseY, hoverLines);
             }
         }
     }

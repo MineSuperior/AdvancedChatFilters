@@ -7,6 +7,7 @@
  */
 package io.github.darkkronicle.advancedchatfilters.scripting.util;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -156,13 +157,13 @@ public class TextBuilder {
      * @param action Action that will be set
      * @param value Content of that action
      */
-    public TextBuilder setClickEvent(String action, String value) {
-        ClickEvent.Action clickAction = ClickEvent.Action.valueOf(action);
-        if (!clickAction.isUserDefinable()) {
+    public TextBuilder setClickEvent(ClickEvent event) {
+        if (!event.getAction().isUserDefinable()) {
             return this;
         }
-        ClickEvent event = new ClickEvent(clickAction, value);
+
         applyStyle(style -> style.withClickEvent(event));
+
         return this;
     }
 
@@ -172,7 +173,7 @@ public class TextBuilder {
      * @param hoverText Text for hover
      */
     public TextBuilder setHoverText(Text hoverText) {
-        HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText);
+        HoverEvent hover = new HoverEvent.ShowText(hoverText);
         applyStyle(style -> style.withHoverEvent(hover));
         return this;
     }
